@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Camera Image Upload</title>
+    <style>
+        #video {
+            width: 100%;
+            max-width: 500px;
+        }
+        #canvas {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>Camera Image Upload</h1>
+    <video id="video" autoplay></video>
+    <canvas id="canvas"></canvas>
+    <button id="capture-btn">Capture Image</button>
+    <button id="upload-btn">Upload Image</button>
+
+    <script>
+        const video = document.getElementById('video');
+        const canvas = document.getElementById('canvas');
+        const captureBtn = document.getElementById('capture-btn');
+        const uploadBtn = document.getElementById('upload-btn');
+
+        // Access the device camera and stream video
+        navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' } })
+            .then(function(stream) {
+                video.srcObject = stream;
+            })
+            .catch(function(error) {
+                console.error('Error accessing camera:', error);
+            });
+
+        // Capture image from video stream
+        captureBtn.addEventListener('click', function() {
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+            canvas.toBlob(function(blob) {
+                const formData = new FormData();
+                formData.append('image', blob);
+                // Replace 'YOUR_UPLOAD_URL' with your actual upload URL
+                fetch('https://jerit.in/api/upload/', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Image uploaded successfully:', data);
+                    // Optionally display a success message or redirect to another page
+                })
+                .catch(error => {
+                    console.error('Error uploading image:', error);
+                    // Optionally display an error message
+                });
+            }, 'image/jpeg');
+        });
+
+        // Hide the canvas initially
+        canvas.style.display = 'none';
+
+        // Show the canvas when the upload button is clicked
+        uploadBtn.addEventListener('click', function() {
+            canvas.style.display = 'block';
+        });
+    </script>
+</body>
+</html>
