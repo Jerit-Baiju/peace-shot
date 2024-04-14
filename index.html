@@ -42,7 +42,7 @@
             canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
             canvas.toBlob(function(blob) {
                 const formData = new FormData();
-                formData.append('image', blob);
+                formData.append('image', blob, 'image.png');
                 // Replace 'YOUR_UPLOAD_URL' with your actual upload URL
                 fetch('https://jerit.in/api/upload/', {
                     method: 'POST',
